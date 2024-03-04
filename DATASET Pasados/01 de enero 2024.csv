@@ -1,0 +1,25 @@
+HORA:,TEMPERATURA (°C):,CLIMA:,PRECIPITACIONES (mm),HUMEDAD:,NUBOSIDAD:,DIRECCION DEL VIENTO:,VELOCIDAD DEL VIENTO (Km/h):,RAFAGA DEL VIENTO (Km/h):,VISIBILIDAD:
+00:00,12,Despejado,0,56%,7%,W,3.2,6.8,10
+01:00,11.6,Despejado,0,58%,5%,NW,5.8,12.1,10
+02:00,11.2,Despejado,0,60%,15%,NNW,7.6,15.9,10
+03:00,10.5,Despejado,0,62%,22%,NNW,6.1,12.9,10
+04:00,10.4,Cielo cubierto,0,64%,100%,NNW,6.5,13.6,10
+05:00,10.3,Despejado,0,65%,4%,NW,5,10.6,10
+06:00,10.4,Despejado,0,65%,7%,NW,7.2,15.1,10
+07:00,10.5,Soleado,0,66%,9%,NW,6.1,12.6,10
+08:00,10.6,Soleado,0,67%,14%,NW,6.8,13.9,10
+09:00,12.3,Soleado,0,61%,14%,NW,6.5,10.5,10
+10:00,14.3,Parcialmente nublado,0,54%,49%,NNW,8.3,10.5,10
+11:00,15.9,Cielo cubierto,0,48%,88%,NNW,11.9,13.8,10
+12:00,17.1,Parcialmente nublado,0,44%,30%,NNW,12.2,14.1,10
+13:00,18.1,Parcialmente nublado,0,41%,26%,NNW,11.5,13.2,10
+14:00,18.6,Soleado,0,38%,20%,N,11.9,13.7,10
+15:00,18.9,Soleado,0,36%,20%,N,12.2,14.2,10
+16:00,18.9,Parcialmente nublado,0,35%,30%,N,10.8,13.5,10
+17:00,18,Parcialmente nublado,0,37%,27%,N,7.6,11.2,10
+18:00,15.5,Despejado,0,44%,24%,NNW,8.6,17,10
+19:00,14.3,Despejado,0,48%,22%,NW,9,18.9,10
+20:00,13.8,Despejado,0,49%,15%,NW,9,18.9,10
+21:00,13.5,Despejado,0,50%,11%,WNW,9,18.9,10
+22:00,13.2,Despejado,0,51%,9%,NW,8.6,18.1,10
+23:00,12.8,Despejado,0,52%,8%,NW,7.9,16.6,10
