@@ -8,11 +8,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
 WEBSITE = 'https://www.tiempo3.com/north-america/mexico/baja-california/mexicali?page=past-weather#day=01&month=1'
-PATH = "Z:\ChromeDriver\chromedriver.exe"
-DATAPATH = 'Z:\ElTruDataSet'
+PATH = r'C:\Users\jesus\Downloads\chromedriver.exe'
+DATAPATH = r'C:\Users\jesus\Downloads\Servicio Social\Cosas del bot script\Weather-Forecasting-Scraping'
 
-service = Service(executable_path=PATH)
-driver = webdriver.Chrome(service=service)
+
+service = Service()
+options = webdriver.ChromeOptions()
+driver = webdriver.Chrome(service=service, options=options)
 
 driver.get(WEBSITE)
 driver.maximize_window()
@@ -85,7 +87,6 @@ for i in range(50):
         print("DIA: {0}".format(i))
 
     except:
-        print('PENE')
         wait = WebDriverWait(driver, 3)
         webdriver.ActionChains(driver).send_keys(Keys.HOME).perform()
         dayOfTomorrow = wait.until(EC.element_to_be_clickable((By.XPATH, f'/html/body/div[5]/a[2]/button')))

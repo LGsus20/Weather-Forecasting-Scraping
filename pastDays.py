@@ -7,12 +7,14 @@ import csv
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
-WEBSITE = 'https://www.tiempo3.com/north-america/mexico/baja-california/mexicali?page=past-weather#day=23&month=9'
+WEBSITE = 'https://www.tiempo3.com/north-america/mexico/baja-california/mexicali?page=past-weather#day=19&month=2'
 PATH = "Z:\ChromeDriver\chromedriver.exe"
 DATAPATH = 'Z:\ElTruDataSet'
 
-service = Service(executable_path=PATH)
-driver = webdriver.Chrome(service=service)
+service = Service()
+options = webdriver.ChromeOptions()
+driver = webdriver.Chrome(service=service, options=options)
+
 
 driver.get(WEBSITE)
 driver.maximize_window()
