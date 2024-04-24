@@ -2,6 +2,9 @@ import LoadMyModel
 import numpy as np
 import pandas as pd
 import LoadMyModel
+from openpyxl import load_workbook
+
+pd.set_option('display.max_columns', None)
 
 # Call LoadMyModel.py for predictions
 Y_hat_df = LoadMyModel.LoadMyModel()
@@ -32,3 +35,18 @@ print("RMSE AutoARIMA:", rmse(y_AutoArima))
 print("RMSE AutoETS:", rmse(y_AutoETS))
 print("RMSE AutoTheta:", rmse(y_AutoTheta))
 print("RMSE AutoCES:", rmse(y_CES))
+
+
+# Name of the Excel file
+excel_file = 'Y_hat_df.xlsx'
+Y_hat_df.to_excel('Y_hat_df.xlsx', index=False)
+wb = load_workbook(excel_file)
+ws = wb.active
+
+# Add your text at the end
+ws.append([''])
+ws.append(['RMSE AutoARIMA:', rmse(y_AutoArima)])
+ws.append(['RMSE AutoETS:', rmse(y_AutoETS)])
+ws.append(['RMSE AutoTheta:', rmse(y_AutoTheta)])
+ws.append(['RMSE AutoCES:', rmse(y_CES)])
+wb.save(excel_file)
