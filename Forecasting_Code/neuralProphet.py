@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import winsound
 
-PATH = r"C:\Users\jesus\Downloads\NeuralProphet demo\DATASET_Modified_Monthly_2023-2024.csv"
+PATH = r"C:\Users\Jesus\Downloads\forecasting\Weather-Forecasting-Scraping\Forecasting_Code\DATASET_Modified_Monthly_2023-2024.csv"
 
 Y_df = pd.read_csv(PATH).assign(unique_id=np.ones(len(pd.read_csv(PATH))))
 print("DATA:\n")
@@ -33,15 +33,15 @@ sf = StatsForecast(
 # Generate forecasts for the specified horizon using the sf object
 Y_hat_df = sf.forecast(df=Y_df, h=horizon) # forecast data
 # Display the first few rows of the forecast DataFrame
-Y_hat_df.head() # preview of forecasted data
+print(Y_hat_df.head()) # preview of forecasted data
 
 sf.fit(df=Y_df)  # Fit the models to the data using the fit method of the StatsForecast object
 
-sf.fitted_  # Access fitted models from the StatsForecast object
+sf.fitted_ # Access fitted models from the StatsForecast object
 
 Y_hat_df = sf.predict(h=horizon)  # Predict or forecast 'horizon' steps ahead using the predict method
 
-print("Prediccion: \n" + str(Y_hat_df.head()))  # Preview the first few rows of the forecasted data
+print("Prediccion: \n" + str(Y_hat_df.head(6)))  # Preview the first few rows of the forecasted data
 
 sf.save()
 
