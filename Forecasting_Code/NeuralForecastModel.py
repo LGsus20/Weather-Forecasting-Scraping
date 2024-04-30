@@ -1,5 +1,6 @@
 from neuralforecast import NeuralForecast
-from neuralforecast.models import NBEATS, LSTM
+from neuralforecast.auto import AutoLSTM
+from neuralforecast.models import NBEATS, LSTM, PatchTST
 import pandas as pd
 import numpy as np
 from random import randint
@@ -11,8 +12,13 @@ Y_df['ds'] = pd.to_datetime(Y_df['ds'])
 print("DATA:\n")
 print(Y_df)
 
+models = [
+    PatchTST(input_size=216, h=6, max_steps=2000),
+    LSTM(input_size=216, h=6, max_steps=2000)
+]
+
 nf = NeuralForecast(
-    models = [NBEATS(input_size=216, h=6, max_steps=2000), LSTM(input_size=216, h=6, max_steps=2000)],
+    models = models,
     freq = 'h'
 )
 
