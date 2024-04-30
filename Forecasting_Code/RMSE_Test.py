@@ -10,7 +10,7 @@ pd.set_option('display.max_columns', None)
 Y_hat_df = LoadMyModel.LoadMyModel()
 
 # ENTER THE ACTUAL VALUES:
-y_true = [3.2, 3.6, 4, 2.5, 2.9, 4.3]
+y_true = [3.6, 3.6, 1.8, 0.4, 2.9, 4.7]
 Y_hat_df = Y_hat_df.assign(RealValues=y_true)
 
 # Show prediction and actual values
@@ -26,15 +26,13 @@ def rmse(y_pred):
 
 # Predicted values:
 y_AutoArima = Y_hat_df['AutoARIMA']
-y_AutoETS = Y_hat_df['AutoETS']
+y_AutoRegressive = Y_hat_df['AutoRegressive']
 y_AutoTheta = Y_hat_df['AutoTheta']
-y_CES = Y_hat_df['CES']
 
 print()
 print("RMSE AutoARIMA:", rmse(y_AutoArima))
-print("RMSE AutoETS:", rmse(y_AutoETS))
+print("RMSE AutoRegressive:", rmse(y_AutoRegressive))
 print("RMSE AutoTheta:", rmse(y_AutoTheta))
-print("RMSE AutoCES:", rmse(y_CES))
 
 
 # Name of the Excel file
@@ -46,7 +44,6 @@ ws = wb.active
 # Add your text at the end
 ws.append([''])
 ws.append(['RMSE AutoARIMA:', rmse(y_AutoArima)])
-ws.append(['RMSE AutoETS:', rmse(y_AutoETS)])
+ws.append(['RMSE AutoRegressive:', rmse(y_AutoRegressive)])
 ws.append(['RMSE AutoTheta:', rmse(y_AutoTheta)])
-ws.append(['RMSE AutoCES:', rmse(y_CES)])
 wb.save(excel_file)
