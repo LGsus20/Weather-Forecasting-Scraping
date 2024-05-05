@@ -8,7 +8,7 @@ from random import randint
 
 print("Starting run, current time:", datetime.now().time())
 
-PATH = r"C:\Users\Jesus\Downloads\forecasting\Weather-Forecasting-Scraping\Forecasting_Code\DATASET_Modified_Monthly_2021-2023.csv"
+PATH = r"https://raw.githubusercontent.com/LGsus20/Weather-Forecasting-Scraping/main/DATASETS/DATASET_Modified_Monthly_2021-2023.csv"
 Y_df = pd.read_csv(PATH).assign(unique_id=np.ones(len(pd.read_csv(PATH))))
 Y_df['ds'] = pd.to_datetime(Y_df['ds'])
 print("DATA:\n")
