@@ -10,7 +10,7 @@ options = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=service, options=options)
 driver.maximize_window()
 
-month = 3
+month = 1
 has31days = 32
 has30days = 31
 for i in range (1,has31days):
@@ -19,13 +19,13 @@ for i in range (1,has31days):
     # Weird stuff that happens to solve all the bugs I had with scrolling to the button
     time.sleep(2)
     wait = WebDriverWait(driver, 10)  # Adjust the timeout as per your requirement
-    year2022 = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[10]/div[1]/button[2]")))
-    if (year2022.text == "2022"):
+    year2021 = wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[10]/div[1]/button[3]")))
+    if (year2021.text == "2021"):
         try:
-            year2022.click()
+            year2021.click()
         except:
             time.sleep(2)
-            year2022.click()
+            year2021.click()
 
         print(f"\n\n\nDAY: {i}")
         with open("results.txt", "a") as file:
