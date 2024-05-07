@@ -1,15 +1,21 @@
 from statsforecast import StatsForecast
-from statsforecast.models import AutoARIMA, AutoETS, AutoTheta, AutoCES
+from neuralforecast import NeuralForecast
+import pandas as pd
+import numpy as np
 
-PATH = r"C:\Users\Jesus\Downloads\forecasting\Weather-Forecasting-Scraping\Forecasting_Code\StatsForecast_2022_2024.pkl"
-# PATH = the route of your model/s, should end in .pkl
+PATH = r"C:\Users\Jesus\Downloads\forecasting\Weather-Forecasting-Scraping\DATASETS\DATASET_Modified_Monthly_2021-2024.csv"
+horizon = 6
 
-def LoadMyModel():
-    LAGS = 6
-    season_length = 24  # Define season length as 24 hours for hourly data
-    horizon = LAGS  # How many hours will it predict?
-    sf = StatsForecast.load(path=PATH)  # Load the model (your .pkl)
-    Y_hat_df = sf.predict(h=horizon).reset_index()  # Predicts 6 lags
+def LoadMyModel(new_data):
+    MODEL_PATH = r"C:\Users\Jesus\Downloads\forecasting\Weather-Forecasting-Scraping\Forecasting_Code\StatsForecast_2022_2024.pkl"
 
-    print(Y_hat_df)
-    return Y_hat_df  # Returns  results in pandas dataFrame
+    sf = StatsForecast.load(path=MODEL_PATH)
+    Y_hat_df = sf.predict(h=horizon).reset_index()
+    # Y_hat_df = sf.predict(X_df=new_data, h=horizon).reset_index()
+    return Y_hat_df
+
+def LoadMyNeuralModel(new_data):
+    MODEL_PATH = "WindForecasting"
+    nf2 = NeuralForecast.load(path=MODEL_PATH)
+    Y_hat_df = nf2.predict(new_data).reset_index()
+    return Y_hat_df

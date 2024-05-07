@@ -4,7 +4,6 @@ from neuralforecast import NeuralForecast
 from neuralforecast.models import LSTM, PatchTST
 import pandas as pd
 import numpy as np
-from random import randint
 
 print("Starting run, current time:", datetime.now().time())
 
@@ -31,9 +30,6 @@ nf.fit(df=Y_df)
 
 print(nf.predict())
 
-try:
-    nf.save("WindForecasting.h5")
-except:
-    nf.save(f"WindForecasting{randint(1, 1000)}.h5")
+nf.save("WindForecasting")
 
 print("Finished, current time:", datetime.now().time())

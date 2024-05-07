@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import winsound
 
-PATH = r"C:\Users\Jesus\Downloads\forecasting\Weather-Forecasting-Scraping\Forecasting_Code\DATASET_Modified_Monthly_2022-2024.csv"
+PATH = r"C:\Users\Jesus\Downloads\forecasting\Weather-Forecasting-Scraping\DATASETS\DATASET_Modified_Monthly_2021-2023.csv"
 
 Y_df = pd.read_csv(PATH).assign(unique_id=np.ones(len(pd.read_csv(PATH))))
 print("DATA:\n")
@@ -18,7 +18,6 @@ horizon = 6 # Forecast horizon is set to 6 hours
 models = [
     AutoARIMA(season_length=season_length), # ARIMA model with automatic order selection and seasonal component
     AutoRegressive(lags=6, include_mean=True),
-    AutoTheta(season_length=season_length), # Theta model with automatic seasonality detection
 ]
 
 # Instantiate StatsForecast class with models, data frequency ('h' for hourly),
