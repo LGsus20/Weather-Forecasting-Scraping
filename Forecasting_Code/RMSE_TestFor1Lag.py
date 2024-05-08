@@ -1,21 +1,58 @@
 import pandas as pd
 import LoadMyModel
 import numpy as np
-import math
-from sklearn.metrics import mean_absolute_error, mean_squared_error, mean_absolute_percentage_error
-from openpyxl import load_workbook
+from openpyxl import Workbook, load_workbook
+from pathlib import Path
+
+def rmse(predicted_values, real_values):
+    predicted_values = np.array(predicted_values)
+    real_values = np.array(real_values)
+    squared_diff = (predicted_values - real_values) ** 2
+    mean_squared_diff = np.mean(squared_diff)
+    rmse = np.sqrt(mean_squared_diff)
+    return rmse
+
+def mae(predicted_values, real_values):
+    predicted_values = np.array(predicted_values)
+    real_values = np.array(real_values)
+    abs_diff = np.abs(predicted_values - real_values)
+    mae = np.mean(abs_diff)
+    return mae
+
+def mape(real_values, predicted_values):
+    actual = np.array(real_values)
+    predicted = np.array(predicted_values)
+
+    # Calculate absolute percentage error for each element
+    absolute_percentage_error = np.abs((actual - predicted) / actual)
+
+    # Replace infinite values with NaN and then drop them
+    absolute_percentage_error = np.where(np.isfinite(absolute_percentage_error), absolute_percentage_error, np.nan)
+    absolute_percentage_error = absolute_percentage_error[~np.isnan(absolute_percentage_error)]
+
+    # Calculate MAPE
+    mape = np.mean(absolute_percentage_error) * 100
+
+    return mape
+
+
 
 pd.set_option('display.max_columns', None)
 PATH = r"https://raw.githubusercontent.com/LGsus20/Weather-Forecasting-Scraping/main/DATASETS/DATASET_Modified_Monthly_2021-2024.csv"
 new_data = pd.read_csv(PATH)
-MY_ERRORS_LIST_PATCHTST = []
-MY_ERRORS_LIST_LSTM = []
+MY_VALUES_PATCHTST = []
+MY_VALUES_LSTM = []
+MY_REAL_VALUES = []
 
-# starting_row = 26280
-starting_row = 26280
-for i in range(len(new_data)-starting_row):
+memoryInNLForecast = 216
+# starting_row = 26280   # THIS IS THE FIRST HOUR OF Jan/01/2024 IN THE DATASET 2021_2024
+starting_row = 26064   # THIS IS THE FIRST HOUR OF Jan/01/2024 IN THE DATASET 2021_2024 taking into account
+                         # 216 lags behind
+
+for i in range(len(new_data)-(starting_row + memoryInNLForecast)):
+    TEST_VARIABLE = len(new_data)-(starting_row + memoryInNLForecast)
     i += 1
-    ending_row = starting_row + 216 + i
+    ending_row = starting_row + memoryInNLForecast + i
     # DATA THE MODEL WILL GET TO PREDICT
     dataForPrediction = new_data.assign(unique_id=np.ones(len(new_data)))
     dataForPrediction = dataForPrediction.iloc[(starting_row+i):ending_row]
@@ -27,54 +64,32 @@ for i in range(len(new_data)-starting_row):
 
     # CALL MODEL FOR PREDICTION
     Y_hat_df = LoadMyModel.LoadMyNeuralModel(dataForPrediction)
-    Y_hat_df = Y_hat_df.iloc[[0]]
 
-    # print("Forecast of the models:")
-    # print(Y_hat_df.tail(1))
-    # print("REAL VALUE:")
-    # print(real_data["y"].iloc[0])
-    # print("ERROR^2: ")
-    MY_ERRORS_LIST_PATCHTST.append((float(Y_hat_df["PatchTST"].iloc[0]) - float(real_data["y"].iloc[0])) ** 2)
-    MY_ERRORS_LIST_LSTM.append((float(Y_hat_df["LSTM"].iloc[0]) - float(real_data["y"].iloc[0])) ** 2)
-    # print(MY_ERRORS_LIST_PATCHTST)
+    # STORE VALUES
+    try:
+        MY_REAL_VALUES.append(float(real_data["y"].iloc[0]))
+        MY_VALUES_PATCHTST.append((float(Y_hat_df["PatchTST"].iloc[0])))
+        MY_VALUES_LSTM.append((float(Y_hat_df["LSTM"].iloc[0])))
+    except(IndexError):
+        break
 
-    print("RMSE PatchTST: ")
-    myPatchTSTErr = math.sqrt(sum(MY_ERRORS_LIST_PATCHTST) / len(MY_ERRORS_LIST_PATCHTST))
-    print(myPatchTSTErr)
-    print("RMSE LSTM: ")
-    myLSTMErr = math.sqrt(sum(MY_ERRORS_LIST_LSTM) / len(MY_ERRORS_LIST_LSTM))
-    print(myLSTMErr)
+    print(f"ITERATION: {i}")
 
 
-myPatchTSTErr = math.sqrt(sum(MY_ERRORS_LIST_PATCHTST) / len(MY_ERRORS_LIST_PATCHTST))
-myLSTMErr = math.sqrt(sum(MY_ERRORS_LIST_LSTM) / len(MY_ERRORS_LIST_LSTM))
+excel_file = f'Benchmark_with_starting_row_{starting_row}.xlsx'
+file_path = Path(excel_file)
 
-print("My PatchTST RMSE: " + str(myPatchTSTErr))
-print("My LSTM RMSE: " + str(myLSTMErr))
-# Does a RMSE test
-def rmse(predicted_values):
-    return mean_squared_error(real_data["y"], predicted_values, squared=False)
-
-def mae(predicted_values):
-    return mean_absolute_error(real_data["y"], predicted_values)
-
-# Predicted values:
-y_LSTM = Y_hat_df['LSTM']
-y_PatchTST = Y_hat_df['PatchTST']
-
-# Add real values
-Y_hat_df = pd.merge(Y_hat_df, real_data)
-
-
-# Name of the Excel file
-excel_file = f'Benchmark_{starting_row}.xlsx'
-Y_hat_df.to_excel(f'Benchmark_{starting_row}.xlsx', index=False)
+if not file_path.is_file():
+    wb = Workbook()
+    wb.save(excel_file)
 wb = load_workbook(excel_file)
 ws = wb.active
 
 ws.append([''])
-ws.append(['RMSE LSTM:', rmse(y_LSTM)])
-ws.append(['RMSE PatchTST:', rmse(y_PatchTST)])
-ws.append(['MAE LSTM:', mae(y_LSTM)])
-ws.append(['MAE PatchTST:', mae(y_PatchTST)])
+ws.append(['RMSE LSTM:', rmse(MY_VALUES_LSTM, MY_REAL_VALUES)])
+ws.append(['RMSE PatchTST:', rmse(MY_VALUES_PATCHTST, MY_REAL_VALUES)])
+ws.append(['MAE LSTM:', mae(MY_VALUES_LSTM, MY_REAL_VALUES)])
+ws.append(['MAE PatchTST:', mae(MY_VALUES_PATCHTST, MY_REAL_VALUES)])
+ws.append(['MAPE LSTM:', mape(MY_VALUES_LSTM, MY_REAL_VALUES)])
+ws.append(['MAPE PatchTST:', mape(MY_VALUES_PATCHTST, MY_REAL_VALUES)])
 wb.save(excel_file)

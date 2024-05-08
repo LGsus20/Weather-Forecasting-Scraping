@@ -18,7 +18,7 @@ print("Device:", device)
 
 models = [
     PatchTST(input_size=216, h=6, max_steps=2000).to(device),
-    LSTM(input_size=216, h=6, max_steps=2000).to(device)
+    LSTM(input_size=216, h=6, max_steps=2000).to(device),
 ]
 
 nf = NeuralForecast(
@@ -30,6 +30,6 @@ nf.fit(df=Y_df)
 
 print(nf.predict())
 
-nf.save("WindForecasting")
+nf.save("WindForecasting216hrs")
 
 print("Finished, current time:", datetime.now().time())
