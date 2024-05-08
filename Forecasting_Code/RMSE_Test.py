@@ -10,7 +10,7 @@ PATH = r"C:\Users\Jesus\Downloads\forecasting\Weather-Forecasting-Scraping\DATAS
 
 # starting_row = 26280
 starting_row = 26281
-ending_row = starting_row + 6
+ending_row = starting_row + 216
 new_data = pd.read_csv(PATH)
 
 # DATA THE MODEL WILL GET TO PREDICT

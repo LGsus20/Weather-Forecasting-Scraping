@@ -1,7 +1,5 @@
 from statsforecast import StatsForecast
 from neuralforecast import NeuralForecast
-import pandas as pd
-import numpy as np
 
 PATH = r"C:\Users\Jesus\Downloads\forecasting\Weather-Forecasting-Scraping\DATASETS\DATASET_Modified_Monthly_2021-2024.csv"
 horizon = 6
