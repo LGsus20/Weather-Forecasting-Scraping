@@ -1,8 +1,13 @@
-import pandas as pd
+# Local
 import LoadMyModel
+
+# Libraries
+import os
 import numpy as np
-from openpyxl import Workbook, load_workbook
+import pandas as pd
 from pathlib import Path
+from openpyxl import Workbook, load_workbook
+
 
 def rmse(predicted_values, real_values):
     predicted_values = np.array(predicted_values)
@@ -35,7 +40,21 @@ def mape(real_values, predicted_values):
 
     return mape
 
+def saveInExcel(real_value, patchtst_value, lstm_value):
+    excelResults = 'recordedValues.xlsx'
+    if os.path.exists(excelResults):
+        # Load the workbook
+        wb = load_workbook(excelResults)
+        sheet = wb.active
+    else:
+        # Create a new workbook and sheet
+        wb = Workbook()
+        sheet = wb.active
+        # Write the header
+        sheet.append(["MY_REAL_VALUES", "MY_VALUES_PATCHTST", "MY_VALUES_LSTM"])
 
+    sheet.append([real_value, patchtst_value, lstm_value])
+    wb.save(excelResults)
 
 pd.set_option('display.max_columns', None)
 PATH = r"https://raw.githubusercontent.com/LGsus20/Weather-Forecasting-Scraping/main/DATASETS/DATASET_Modified_Monthly_2021-2024.csv"
@@ -67,9 +86,14 @@ for i in range(len(new_data)-(starting_row + memoryInNLForecast)):
 
     # STORE VALUES
     try:
-        MY_REAL_VALUES.append(float(real_data["y"].iloc[0]))
-        MY_VALUES_PATCHTST.append((float(Y_hat_df["PatchTST"].iloc[0])))
-        MY_VALUES_LSTM.append((float(Y_hat_df["LSTM"].iloc[0])))
+        myRealVal = float(real_data["y"].iloc[0])
+        myValPatchTST = (float(Y_hat_df["PatchTST"].iloc[0]))
+        myValLSTM = (float(Y_hat_df["LSTM"].iloc[0]))
+
+        MY_REAL_VALUES.append(myRealVal)
+        MY_VALUES_PATCHTST.append(myValPatchTST)
+        MY_VALUES_LSTM.append(myValLSTM)
+        saveInExcel(myRealVal, myValPatchTST, myValLSTM)
     except(IndexError):
         break
 
